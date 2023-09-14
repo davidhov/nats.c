@@ -16372,6 +16372,8 @@ test_ServerPoolUpdatedOnClusterUpdate(void)
             s3Pid = NATS_INVALID_PID;
         }
 
+        nats_Sleep(1000);
+
         test("Wait for reconnect: ");
         natsMutex_Lock(arg.m);
         while ((s != NATS_TIMEOUT) && !arg.reconnected)
