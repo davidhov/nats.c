@@ -575,6 +575,7 @@ _processInfo(natsConnection *nc, char *info, int len)
         if ((nc->cur != NULL) && (nc->cur->url != NULL) && !nats_HostIsIP(nc->cur->url->host))
             tlsName = (const char*) nc->cur->url->host;
 
+        printf("<>/<> _processInfo %s %d: %d\n", nc->info.host, nc->info.port, nc->info.connectURLsCount);
         s = natsSrvPool_addNewURLs(nc->srvPool,
                                    nc->cur->url,
                                    nc->info.connectURLs,

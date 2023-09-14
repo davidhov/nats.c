@@ -102,6 +102,7 @@ natsSrvPool_GetNextServer(natsSrvPool *pool, natsOptions *opts, const natsSrv *c
     else
     {
         // Remove the server from the list
+        printf("<>/<> natsSrvPool_GetNextServer - removing %s from pool\n", s->url->fullUrl);
         _freeSrv(s);
         pool->size--;
     }
@@ -182,7 +183,10 @@ _addURLToPool(natsSrvPool *pool, char *sURL, bool implicit, const char *tlsName)
             }
         }
         if (s == NATS_OK)
+        {
+        printf("<>/<> _addURLToPool - adding %s\n", srv->url->fullUrl);
             pool->srvrs[pool->size++] = srv;
+        }
     }
     if (s != NATS_OK)
     {
@@ -273,6 +277,7 @@ natsSrvPool_addNewURLs(natsSrvPool *pool, const natsUrl *curUrl, char **urls, in
             {
                 pool->srvrs[j] = pool->srvrs[j+1];
             }
+            printf("<>/<> natsSrvPool_addNewURLs - removing %s from pool\n", srv->url->fullUrl);
             _freeSrv(srv);
             pool->size--;
             i--;

@@ -7438,7 +7438,7 @@ _checkPool(natsConnection *nc, char **expectedURLs, int expectedURLsCount)
         natsMutex_Unlock(nc->mu);
         return NATS_ERR;
     }
-    for (attempts=0; attempts<30; attempts++)
+    for (attempts=0; attempts<20; attempts++)
     {
         for (i=0; i<expectedURLsCount; i++)
         {
