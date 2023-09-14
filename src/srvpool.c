@@ -33,6 +33,8 @@ _createSrv(natsSrv **newSrv, char *url, bool implicit, const char *tlsName)
     natsStatus  s = NATS_OK;
     natsSrv     *srv = (natsSrv*) NATS_CALLOC(1, sizeof(natsSrv));
 
+    printf("<>/<> _createSrv - %s: %d\n", url, (int) implicit);
+
     if (srv == NULL)
         return nats_setDefaultError(NATS_NO_MEMORY);
 
@@ -146,6 +148,8 @@ _addURLToPool(natsSrvPool *pool, char *sURL, bool implicit, const char *tlsName)
     bool        addedToMap = false;
     char        bareURL[256];
 
+    printf("<>/<> _addURLToPool - %s: %d\n", sURL, (int) implicit);
+
     s = _createSrv(&srv, sURL, implicit, tlsName);
     if (s != NATS_OK)
         return NATS_UPDATE_ERR_STACK(s);
@@ -231,6 +235,11 @@ natsSrvPool_addNewURLs(natsSrvPool *pool, const natsUrl *curUrl, char **urls, in
     bool        isLH;
     natsStrHash *tmp = NULL;
     natsSrv     *srv = NULL;
+
+    printf("<>/<> natsSrvPool_addNewURLs: curURL: %s: %d\n", curUrl->fullUrl, urlCount);
+    for (i=0; i<urlCount; i++)
+        printf("<>/<> natsSrvPool_addNewURLs: %d: %s\n", i, urls[i]);
+
 
     // Note about pool randomization: when the pool was first created,
     // it was randomized (if allowed). We keep the order the same (removing

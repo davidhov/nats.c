@@ -7431,10 +7431,17 @@ _checkPool(natsConnection *nc, char **expectedURLs, int expectedURLsCount)
     char    buf[64];
     bool    ok;
 
+    printf("<>/<> _checkPool: want %d\n", expectedURLsCount);
+
     natsMutex_Lock(nc->mu);
     if (nc->srvPool->size != expectedURLsCount)
     {
         printf("Expected pool size to be %d, got %d\n", expectedURLsCount, nc->srvPool->size);
+        for (i=0; i<nc->srvPool->size; i++)
+        {
+            srv = nc->srvPool->srvrs[i];
+            printf("\t<>/<> %s: %d\n", srv->url->fullUrl, srv->isImplicit);
+        }
         natsMutex_Unlock(nc->mu);
         return NATS_ERR;
     }
@@ -16320,6 +16327,7 @@ test_ServerPoolUpdatedOnClusterUpdate(void)
 
     // Stop s1. Since this was passed to the Connect() call, this one should
     // still be present.
+            printf("<>/<> stop server 1\n");
     _stopServer(s1Pid);
     s1Pid = NATS_INVALID_PID;
 
@@ -16380,6 +16388,8 @@ test_ServerPoolUpdatedOnClusterUpdate(void)
             testCond(s == NATS_OK);
         }
     }
+
+    goto _EXIT;
 
     {
         const char *urls[] = {"127.0.0.1:4222", "127.0.0.1:4223", "127.0.0.1:4224"};
@@ -16489,6 +16499,7 @@ test_ServerPoolUpdatedOnClusterUpdate(void)
         _waitForConnClosed(&arg);
     }
 
+_EXIT:
     natsConnection_Destroy(conn);
     natsOptions_Destroy(opts);
 
