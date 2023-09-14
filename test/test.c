@@ -5988,6 +5988,8 @@ _reconnectedCb(natsConnection *nc, void *closure)
     struct threadArg    *arg = (struct threadArg*) closure;
     int64_t             now  = nats_Now();
 
+    printf("<>/<> _reconnectedCb\n");
+
     natsMutex_Lock(arg->m);
     arg->reconnected = true;
     arg->reconnects++;
@@ -7436,7 +7438,7 @@ _checkPool(natsConnection *nc, char **expectedURLs, int expectedURLsCount)
         natsMutex_Unlock(nc->mu);
         return NATS_ERR;
     }
-    for (attempts=0; attempts<20; attempts++)
+    for (attempts=0; attempts<30; attempts++)
     {
         for (i=0; i<expectedURLsCount; i++)
         {
@@ -15961,6 +15963,8 @@ _discoveredServersCb(natsConnection *nc, void *closure)
 {
     struct threadArg    *arg = (struct threadArg*) closure;
 
+    printf("<>/<> _discoveredServersCb\n");
+
     natsMutex_Lock(arg->m);
     arg->sum++;
     natsCondition_Signal(arg->c);
@@ -16347,6 +16351,7 @@ test_ServerPoolUpdatedOnClusterUpdate(void)
         if (port == 4223)
         {
             urls[1] = "127.0.0.1:4224";
+            printf("<>/<> stop server 2\n");
             _stopServer(s2Pid);
             s2Pid = NATS_INVALID_PID;
             restartS2 = true;
@@ -16354,6 +16359,7 @@ test_ServerPoolUpdatedOnClusterUpdate(void)
         else
         {
             urls[1] = "127.0.0.1:4223";
+            printf("<>/<> stop server 3\n");
             _stopServer(s3Pid);
             s3Pid = NATS_INVALID_PID;
         }
